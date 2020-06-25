@@ -1,0 +1,120 @@
+<div class="all" style="display: flex;">
+
+    <div class="class1" style="margin: auto;">
+        <button id="json1" >json 1</button>
+        <div class="json"  [style]='disply2'></div>
+    </div>
+
+    <div class="class2" style="margin: auto;">
+        <button id="json2" >json 2</button>
+        <div class="js"  [style]='disply'></div>
+
+        
+    </div>
+    
+
+
+</div>
+
+
+<script>
+
+    let js = document.querySelector(".js");
+    let json = document.querySelector(".json");
+    let button1 =document.querySelector("#json1")
+    let button2 =document.querySelector("#json2")
+
+    let disply ="display: none;"
+    let disply2 ="display: none;"
+
+    let templat = `<li style="color:[color]">
+                <label> name : </label> <span>[name]</span>
+                <label> ,age : </label> <span>[age]</span>
+                </li>`;
+
+   
+
+
+    function doc(url,templet){
+            console.log("kgfkfkfkf");
+            
+            display = "display: inline;"
+            let httpAjax = new XMLHttpRequest();
+
+            httpAjax.onreadystatechange = function(){
+            if (this.readyState ==4 && this.status==200){            
+                
+                json.innerHTML= render(JSON.parse(this.responseText),templet) 
+            }
+        };
+            httpAjax.open("GET",url)
+            httpAjax.send()
+        }
+
+        button1.onclick = () =>{
+            doc('https://raw.githubusercontent.com/shlomoYosefi/ajax/master/src/app/ajax.json',templat);
+        }
+
+
+        
+        
+        function doc2(url,templet){
+
+
+            display2 = "display: inline;"
+            let httpAjax = new XMLHttpRequest();
+
+            httpAjax.onreadystatechange = function(){
+            if (this.readyState ==4 && this.status==200){            
+                
+                js.innerHTML= render(JSON.parse(this.responseText),templet) 
+            }
+        }
+            httpAjax.open("GET",url)
+            httpAjax.send()
+        }
+        button2.onclick = () =>{
+            doc2('https://raw.githubusercontent.com/shlomoYosefi/ajax/master/src/app/ajax2.json',templat)
+        }
+
+
+
+
+
+
+
+    function render(arr,templet){
+            
+            let final = ''
+            let htmlFinal=''
+            let myTemplet = templet
+            let j = /\[.*\]/g
+            let find = myTemplet.match(j)
+
+            for (let i =0;i<find.length;i++){
+                find[i]=find[i].replace('[','').replace(']','')
+            }
+
+        for (let i in arr){
+                
+     
+            
+            arr[i].forEach(j => {
+                
+                let ht = templet
+                find.forEach(x=>{
+                    ht = ht.replace(`[${x}]`,j[x])
+                })
+
+                htmlFinal+=ht
+            })
+            final += `<div style="border: solid 5px greenyellow;"><ul>${htmlFinal}</ul></div><br><br><br>`
+            htmlFinal =''
+        }         
+        return final;
+        }
+
+
+
+
+</script>
